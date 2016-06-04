@@ -12,6 +12,34 @@ public class CarpetBatch {
 		aSKU = pSKU;
 	}
 
+	public ArrayList<javaxt.io.File> getEnPictures() {
+
+		ArrayList<javaxt.io.File> ePicClone = new ArrayList<javaxt.io.File>();
+
+		for (File f : ePictures) {
+
+			javaxt.io.File xtFile = new javaxt.io.File(f.getAbsolutePath());
+			ePicClone.add(xtFile);
+
+		}
+
+		return ePicClone;
+	}
+
+	public ArrayList<javaxt.io.File> getFrPictures() {
+
+		ArrayList<javaxt.io.File> fPicClone = new ArrayList<javaxt.io.File>();
+
+		for (File f : fPictures) {
+
+			javaxt.io.File xtFile = new javaxt.io.File(f.getAbsolutePath());
+			fPicClone.add(xtFile);
+
+		}
+
+		return fPicClone;
+	}
+
 	public void setSKU(String pSKU) {
 
 		aSKU = pSKU;
@@ -43,13 +71,12 @@ public class CarpetBatch {
 	public void generateFPictures() {
 
 		fPictures.clear();
-		
-		for(File p : ePictures){
-			
+
+		for (File p : ePictures) {
+
 			fPictures.add(p);
-			
+
 		}
-		
 
 	}
 

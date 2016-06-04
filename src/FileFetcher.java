@@ -6,6 +6,7 @@ import java.nio.file.InvalidPathException;
 import java.util.ArrayList;
 import org.apache.commons.io.*;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import javaxt.io.Directory;
 
 public class FileFetcher {
 
@@ -42,7 +43,7 @@ public class FileFetcher {
 			File[] pPictureArray = pABC.listFiles(new FilenameFilter() {
 				public boolean accept(File f, String s) {
 
-					if (s.matches("[A-Z]{1,3}[0-9]+(-[1-4])?\\.JPG")) {   //change the filter
+					if (s.matches("([A-Z]|(a-z)){1,3}[0-9]+(-[1-4])?\\.(JPG|jpg)")) {   //change the filter
 
 						return true;
 
@@ -61,28 +62,34 @@ public class FileFetcher {
 
 	}
 	
-	 private void search(File file, String pQuery) {
+	public javaxt.io.File getZipFile(Directory pDir) throws IOException{
+		
+		FilenameFilter zipFilter = new FilenameFilter() {
+			public boolean accept(File f, String s) {
 
-			if (file.isDirectory()) {
-			  System.out.println("Searching directory ... " + file.getAbsoluteFile());
-				
-		            //do you have permission to read this directory?	
-			    if (file.canRead()) {
-				for (File temp : file.listFiles()) {
-				    if (temp.isDirectory()) {
-					search(temp);
-				    } else {
-					if (getFileNameToSearch().equals(temp.getName().toLowerCase())) {			
-					    result.add(temp.getAbsoluteFile().toString());
-				    }
+				if (s.endsWith(".zip")) {  
 
-				}
-			    }
+					return true;
 
-			 } else {
-				System.out.println(file.getAbsoluteFile() + "Permission Denied");
-			 }
-		      }
+				} else
+					return false;
 
-		  }
+			}
+		};
+		
+		javaxt.io.File[] myArray = pDir.getFiles(zipFilter, true);
+		
+		if(myArray.length == 1) return myArray[0];
+		
+		else{
+			System.out.println("more than one zip file found in "+pDir.getPath());
+			throw new IOException();
+			
+		}
+		
+		
+		
+	}
+	
+	
 }
