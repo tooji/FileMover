@@ -9,12 +9,6 @@ import org.apache.commons.io.FilenameUtils;
 public class StringFetcher{
 	
 	
-	public String getZipFile(Directory pIndianicSub){
-		
-		
-		
-		
-	}
 	
 	public String getSKU(File pABCFolder) throws IOException{   // attempts to get the sku from a folder of files
 		

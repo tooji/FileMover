@@ -84,6 +84,17 @@ public class Driver {
 				CarpetMover.moveAndOverwrite(aCarpetBatch, engSubDir, "En");
 				CarpetMover.moveAndOverwrite(aCarpetBatch, frSubDir, "Fr");
 				
+				javaxt.io.File ZipEng = aFF.getZipFile(engSubDir);
+				javaxt.io.File ZipFr = aFF.getZipFile(frSubDir);
+				
+				String ZStrEng = ZipEng.getName();
+				String ZStrFr = ZipFr.getName();
+				
+				ZipEng.delete();
+				ZipFr.delete();
+				
+				
+				
 				
 				
 				
