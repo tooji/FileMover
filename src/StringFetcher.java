@@ -20,7 +20,13 @@ public class StringFetcher{
 			
 			for ( File pic : pPictureArray){
 				
-				if(pic.getName().matches("[A-Z]{1,3}[0-9]+\\.JPG")){
+				
+				SKU = FilenameUtils.removeExtension(pic.getName());
+				
+				SKU = SKU.replaceAll("(-[1-4])?","");
+				
+				
+				/*if(pic.getName().matches("[A-Z]{1,3}[0-9]+\\.JPG")){ //
 					
 					SKU = FilenameUtils.removeExtension(pic.getName());
 					
@@ -28,7 +34,7 @@ public class StringFetcher{
 					
 					System.out.println("A SKU WAS NOT FOUND!!");
 					throw new IOException();
-				}
+				}*/
 				
 				
 				

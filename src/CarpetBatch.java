@@ -1,5 +1,10 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import org.apache.commons.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class CarpetBatch {
 
@@ -68,13 +73,75 @@ public class CarpetBatch {
 
 	}
 
-	public void generateFPictures() {
+	public void generateFPictures(File pABC) {
+		
+		String newName = null;
+		File frenchFile = null;
+		
+		
+		
+		if(ePictures.isEmpty()){
+			 try {
+				throw new IOException("English pictures must be set before french pictures can be generated");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
 
 		fPictures.clear();
-
+		
+		
+		Path frenchDir = Paths.get(pABC.getPath()+"\\Fr");
+		
+		try {
+			frenchDir = Files.createDirectory(frenchDir);
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			
+			e1.printStackTrace();
+		}
+		
 		for (File p : ePictures) {
-
-			fPictures.add(p);
+			Path source = Paths.get(p.getPath());
+			
+			int n = 0;
+			try {
+			    n = Integer.parseInt (p.getName().replaceFirst("*-",""));
+			} catch (Exception e) {}
+			
+			
+			if (n == 0){
+				
+				String temp = FilenameUtils.getBaseName(p.getName());
+				newName = temp+"F.jpg";
+			}else if (n > 0){
+				
+				String temp = FilenameUtils.getBaseName(p.getName()); 
+				newName = temp+"F-"+n+".jpg";
+			}else{
+				
+				System.out.println("Something went wrong while generating a french picture");
+				
+			}
+			
+			
+			try {
+				//Files.move(source, frenchDir.resolveSibling(newName),REPLACE_EXISTING);
+				if(!newName.isEmpty()){
+					Path target = Paths.get(frenchDir.toString()+"//"+source.getFileName());
+					Path frPath = Files.copy(source, target.resolveSibling(newName), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+					frenchFile = new File(frPath.toString());
+				}
+				
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			fPictures.add(frenchFile);
 
 		}
 

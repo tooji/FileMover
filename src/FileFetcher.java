@@ -43,11 +43,20 @@ public class FileFetcher {
 			File[] pPictureArray = pABC.listFiles(new FilenameFilter() {
 				public boolean accept(File f, String s) {
 
-					if (s.matches("([A-Z]|(a-z)){1,3}[0-9]+(-[1-4])?\\.(JPG|jpg)")) {   //change the filter
+					if (!s.matches("DSC\\_[0-9]+*\\.(jpg|JPG)")) {
+						
+						if(!s.matches("Fr")) {
+							return true;
+						}else return false;
+						
+						
+					}else if (s.matches("([A-Z]|(a-z)){1,3}[0-9]+(-[1-4])?\\.(JPG|jpg)")) {   //change the filter
 
 						return true;
 
-					} else
+					}
+					
+					else
 						return false;
 
 				}
@@ -64,20 +73,20 @@ public class FileFetcher {
 	
 	public javaxt.io.File getZipFile(Directory pDir) throws IOException{
 		
-		FilenameFilter zipFilter = new FilenameFilter() {
-			public boolean accept(File f, String s) {
-
-				if (s.endsWith(".zip")) {  
-
-					return true;
-
-				} else
-					return false;
-
-			}
-		};
+//		FilenameFilter zipFilter = new FilenameFilter() {
+//			public boolean accept(File f, String s) {
+//
+//				if (s.endsWith(".zip")) {  
+//
+//					return true;
+//
+//				} else
+//					return false;
+//
+//			}
+//		};
 		
-		javaxt.io.File[] myArray = pDir.getFiles(zipFilter, true);
+		javaxt.io.File[] myArray = pDir.getFiles("*.zip", true);
 		
 		if(myArray.length == 1) return myArray[0];
 		
