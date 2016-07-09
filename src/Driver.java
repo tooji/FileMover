@@ -3,19 +3,27 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import javaxt.io.Directory;
+import net.lingala.zip4j.exception.ZipException;
+import net.lingala.zip4j.model.ZipParameters;
+import net.lingala.zip4j.util.Zip4jConstants;
+import net.lingala.zip4j.core.ZipFile;
 
 public class Driver {
 	
 	public static void main(String args[]) throws IOException{
 		
-		String engREGEX = "([A-Z]|[a-z]){1,3}[0-9]+(-[1-4])?\\.(JPG|jpg)";
-		String frREGEX = "([A-Z]|[a-z]){1,3}[0-9]+(F|f)(-[1-4])?\\.(JPG|jpg)";
+		
 		
 		File[] ABCDFolders;
 		File aDirectory = new File(args[0]);
 		Directory aINDIANIC =  new Directory(args[1]);
+		//Directory aINDIANIC =  new Directory("C:\\Users\\Samina\\Desktop\\TestIndianic");
 		FileFetcher aFF = new FileFetcher();
 		StringFetcher aSF = new StringFetcher();
+		ZipParameters parameters = new ZipParameters();
+		
+		parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+		parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 		
 
 		
@@ -31,39 +39,39 @@ public class Driver {
 			for (File ABC : ABCDFolders){
 				
 				String SKU = aSF.getSKU(ABC);
+			
+				
+			
+				
+				
+				System.out.println("Working on carpet SKU:   " + SKU);
 				
 				CarpetBatch aCarpetBatch = new CarpetBatch(SKU);
 				
 				aCarpetBatch.setEPictures(aFF.getPictures(ABC));
-				aCarpetBatch.generateFPictures();
+				aCarpetBatch.generateFPictures(ABC);
 				
-				FilenameFilter engFilter = new FilenameFilter() {
-					public boolean accept(File f, String s) {
-
-						if (s.matches(SKU+"(-[1-4])?\\.(JPG|jpg)")) {   //change the filter
-
-							return true;
-
-						} else
-							return false;
-
-					}
-				};
 				
-				FilenameFilter frFilter = new FilenameFilter() {
-					public boolean accept(File f, String s) {
 
-						if (s.matches(SKU+"(f|F)(-[1-4])?\\.(JPG|jpg)")) {   //change the filter
-
-							return true;
-
-						} else
-							return false;
-
-					}
-				};
 				
-				javaxt.io.File[] engIndianicPics = aINDIANIC.getFiles(engFilter, true);
+				String[] eArray = {SKU+".jpg", SKU+"-1.jpg", SKU+"-2.jpg", SKU+"-3.jpg", SKU+"-4.jpg"};
+				
+				//slow placeholder version
+				javaxt.io.File[] engIndianicPics = aINDIANIC.getFiles(eArray, true);
+				
+				if (engIndianicPics == null){
+					
+					System.out.println("engIndianicPics array is null for sku: " + SKU);
+					
+				}
+				
+				if (engIndianicPics.length == 0){
+					
+					System.out.println("eng indianic pic array is empty for sku: "+ SKU);
+					System.out.println("Carpet could not be located on Indianic, continuing to next carpet");
+					continue;
+					
+				}
 				
 				if(!VerifierTool.checkSameParent(engIndianicPics)){
 					
@@ -73,11 +81,14 @@ public class Driver {
 					
 				}
 				
+				
+				
 				Directory engSubDir = new Directory(VerifierTool.getSameParent(engIndianicPics));
 				Directory folderSubDir = engSubDir.getParentDirectory();
 				
+				String[] fArray = {SKU+"f.jpg", SKU+"f-1.jpg", SKU+"f-2.jpg", SKU+"f-3.jpg", SKU+"f-4.jpg"};
+				javaxt.io.File[] frIndianicPics = folderSubDir.getFiles(fArray, true);
 				
-				javaxt.io.File[] frIndianicPics = folderSubDir.getFiles(frFilter, true);
 				
 				Directory frSubDir = new Directory(VerifierTool.getSameParent(frIndianicPics));
 				
@@ -87,12 +98,31 @@ public class Driver {
 				javaxt.io.File ZipEng = aFF.getZipFile(engSubDir);
 				javaxt.io.File ZipFr = aFF.getZipFile(frSubDir);
 				
-				String ZStrEng = ZipEng.getName();
-				String ZStrFr = ZipFr.getName();
+				String ZStrEng = ZipEng.getPath()+ZipEng.getName(true);
+				
+				String ZStrFr = ZipFr.getPath()+ZipFr.getName(true);
+				
 				
 				ZipEng.delete();
 				ZipFr.delete();
 				
+				//Zipper.zipSimpleFolder(new File(ZipEng.getPath()),"", ZStrEng);
+				
+				//Zipper.zipSimpleFolder(new File(ZipFr.getPath()),"", ZStrFr);
+				
+				String folderToZipE = ZipEng.getPath();
+				String folderToZipF = ZipFr.getPath();
+				
+				try{
+					ZipFile zipFileEng = new ZipFile(ZStrEng);
+					ZipFile zipFileFr = new ZipFile(ZStrFr);
+					
+					zipFileEng.addFolder(folderToZipE, parameters);
+					zipFileFr.addFolder(folderToZipF, parameters);
+					
+				}catch(ZipException e){
+					e.printStackTrace();
+				}
 				
 				
 				

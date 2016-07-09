@@ -3,6 +3,7 @@ import java.io.IOException;
 import javaxt.io.File;
 
 
+
 public class VerifierTool {
 	
 	public static boolean checkSameParent(javaxt.io.File[] fArray) throws IOException{
