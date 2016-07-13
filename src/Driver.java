@@ -2,6 +2,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import org.apache.commons.io.FilenameUtils;
+
 import javaxt.io.Directory;
 import net.lingala.zip4j.exception.ZipException;
 import net.lingala.zip4j.model.ZipParameters;
@@ -24,6 +27,8 @@ public class Driver {
 		
 		parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 		parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
+		parameters.setIncludeRootFolder(false);
+		parameters.setReadHiddenFiles(false);
 		
 
 		
@@ -46,7 +51,7 @@ public class Driver {
 				
 				System.out.println("Working on carpet SKU:   " + SKU);
 				
-				CarpetBatch aCarpetBatch = new CarpetBatch(SKU);
+				CarpetBatch aCarpetBatch = new CarpetBatch(SKU, ABC.getPath());
 				
 				aCarpetBatch.setEPictures(aFF.getPictures(ABC));
 				aCarpetBatch.generateFPictures(ABC);
@@ -54,7 +59,7 @@ public class Driver {
 				
 
 				
-				String[] eArray = {SKU+".jpg", SKU+"-1.jpg", SKU+"-2.jpg", SKU+"-3.jpg", SKU+"-4.jpg"};
+				String[] eArray = {SKU+".jpg", SKU+"-1.jpg", SKU+"-2.jpg", SKU+"-3.jpg", SKU+"-4.jpg", SKU+"-5.jpg", SKU+"-6.jpg"};
 				
 				//slow placeholder version
 				javaxt.io.File[] engIndianicPics = aINDIANIC.getFiles(eArray, true);
@@ -86,7 +91,7 @@ public class Driver {
 				Directory engSubDir = new Directory(VerifierTool.getSameParent(engIndianicPics));
 				Directory folderSubDir = engSubDir.getParentDirectory();
 				
-				String[] fArray = {SKU+"f.jpg", SKU+"f-1.jpg", SKU+"f-2.jpg", SKU+"f-3.jpg", SKU+"f-4.jpg"};
+				String[] fArray = {SKU+"f.jpg", SKU+"f-1.jpg", SKU+"f-2.jpg", SKU+"f-3.jpg", SKU+"f-4.jpg", SKU+"f-5.jpg", SKU+"f-6.jpg" };
 				javaxt.io.File[] frIndianicPics = folderSubDir.getFiles(fArray, true);
 				
 				
@@ -98,20 +103,34 @@ public class Driver {
 				javaxt.io.File ZipEng = aFF.getZipFile(engSubDir);
 				javaxt.io.File ZipFr = aFF.getZipFile(frSubDir);
 				
-				String ZStrEng = ZipEng.getPath()+ZipEng.getName(true);
 				
-				String ZStrFr = ZipFr.getPath()+ZipFr.getName(true);
+				String ZStrEng;
+				String ZStrFr;
+				
+				if(ZipEng != null){
+					 ZStrEng = ZipEng.getPath()+ZipEng.getName(true);
+					 ZipEng.delete();
+				}else{
+					
+					//must generate zip
+					 ZStrEng = engSubDir.getPath()+FilenameUtils.getBaseName(engSubDir.getName()) + ".zip";
+				}
+				
+				if(ZipFr != null){
+					 ZStrFr = ZipFr.getPath()+ZipFr.getName(true);
+					 ZipFr.delete();
+				}else{
+					
+					//must generate zip
+					 ZStrFr = frSubDir.getPath()+FilenameUtils.getBaseName(frSubDir.getName()) + ".zip";	
+				}
 				
 				
-				ZipEng.delete();
-				ZipFr.delete();
 				
-				//Zipper.zipSimpleFolder(new File(ZipEng.getPath()),"", ZStrEng);
 				
-				//Zipper.zipSimpleFolder(new File(ZipFr.getPath()),"", ZStrFr);
 				
-				String folderToZipE = ZipEng.getPath();
-				String folderToZipF = ZipFr.getPath();
+				String folderToZipE = engSubDir.getPath();  
+				String folderToZipF = frSubDir.getPath();
 				
 				try{
 					ZipFile zipFileEng = new ZipFile(ZStrEng);
@@ -144,7 +163,7 @@ public class Driver {
 		
 		
 		
-	
+	System.out.println("\n\n----------------------------------DONE-------------------------------------\n\n");
 		
 	}
 

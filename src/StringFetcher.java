@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -17,27 +18,59 @@ public class StringFetcher{
 		if (pABCFolder.isDirectory()) {
 
 			File[] pPictureArray = pABCFolder.listFiles();
+			ArrayList<String> SKUcompareList = new ArrayList<String>();
 			
 			for ( File pic : pPictureArray){
 				
 				
-				SKU = FilenameUtils.removeExtension(pic.getName());
+			//	SKU = FilenameUtils.removeExtension(pic.getName());
 				
-				SKU = SKU.replaceAll("(-[1-4])?","");
+			//	SKU = SKU.replaceAll("(-[1-4])?","");
 				
-				
-				/*if(pic.getName().matches("[A-Z]{1,3}[0-9]+\\.JPG")){ //
+				if(!pic.getName().matches("DSC\\_[0-9]+\\.(jpg|JPG)") && !pic.getName().matches("Thumbs.db")){
 					
-					SKU = FilenameUtils.removeExtension(pic.getName());
+				
+				 
 					
-				} else {
+						SKU = FilenameUtils.removeExtension(pic.getName());
+						SKU = SKU.replaceAll("(-[1-4])?","");
+						
+						SKUcompareList.add(SKU);
+				
 					
-					System.out.println("A SKU WAS NOT FOUND!!");
-					throw new IOException();
-				}*/
+				
+				}
 				
 				
 				
+			}
+			
+//			int counter = 0;
+//			String temp = "";
+//			for(String s: SKUcompareList){
+//				
+//				if (counter == 0){
+//					temp = s;
+//				}else{
+//					
+//					if(!temp.matches(s)){
+//						System.out.println("A SKU WAS NOT FOUND!!");
+//						throw new IOException();
+//					}else{
+//						counter++;
+//					}
+//					
+//				}
+//				
+//				
+//			}
+			
+			
+			
+			if (SKU.matches("")) {
+				
+				System.out.println("A SKU WAS NOT FOUND!!");
+				throw new IOException();
 			}
 
 			return SKU;

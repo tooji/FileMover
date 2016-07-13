@@ -2,7 +2,11 @@
 import java.io.IOException;
 import java.util.ArrayList;
 
-import  javaxt.io.File;
+import javaxt.io.Directory;
+
+import java.io.*;
+
+
 
 
 
@@ -30,14 +34,30 @@ public class CarpetMover {
 		}
 		
 		
+		File dir = new File(pCarpetBatch.getABC().getPath()+"//overwrittenFiles");
+		if(dir.mkdir()){
+		
 		for (javaxt.io.File f: aCarpets){
+			
+			javaxt.io.File fileToBeOverwritten = new javaxt.io.File(pDestination.getPath()+f.getName(true));
+			
+			if(fileToBeOverwritten.exists()){
+				
+				
+					Directory oDestination = new Directory(dir.getPath());
+					fileToBeOverwritten.copyTo(oDestination, true);
+					
+				
+				
+				
+			}
 			
 			f.copyTo(pDestination, true);
 			
 		}
 			
 		
-		
+		}
 		
 		
 	}

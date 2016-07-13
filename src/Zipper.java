@@ -23,7 +23,7 @@ public class Zipper {
 			byte[] buf = new byte[1024];
 			int bytesRead;
 			
-			 // Read the input file by chucks of 1024 bytes
+			 // Read the input file by chunks of 1024 bytes
 			 // and write the read bytes to the zip stream
 
 			while ((bytesRead = fileInputStream.read(buf)) > 0){
@@ -32,7 +32,7 @@ public class Zipper {
 			}
 			
 			zipOutputStream.closeEntry();
-			
+			fileInputStream.close();
 			
 			
 			
