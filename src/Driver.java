@@ -28,7 +28,7 @@ public class Driver {
 		parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
 		parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 		parameters.setIncludeRootFolder(false);
-		parameters.setReadHiddenFiles(false);
+		//parameters.setReadHiddenFiles(false);
 		
 
 		
@@ -124,6 +124,17 @@ public class Driver {
 				
 				javaxt.io.File ZipEng = aFF.getZipFile(engSubDir);
 				javaxt.io.File ZipFr = aFF.getZipFile(frSubDir);
+				
+				File thumbsE = new File(engSubDir.getPath()+"\\Thumbs.db");
+				File thumbsF = new File(frSubDir.getPath()+"\\Thumbs.db");
+				
+				if (thumbsE.exists()){
+					thumbsE.delete();
+				}
+				
+				if (thumbsF.exists()){
+					thumbsF.delete();
+				}
 				
 				
 				String ZStrEng;
