@@ -35,7 +35,7 @@ public class CarpetMover {
 		
 		
 		File dir = new File(pCarpetBatch.getABC().getPath()+"//overwrittenFiles");
-		if(dir.mkdir()){
+		dir.mkdir();
 		
 		for (javaxt.io.File f: aCarpets){
 			
@@ -57,7 +57,7 @@ public class CarpetMover {
 		}
 			
 		
-		}
+		
 		
 		
 	}

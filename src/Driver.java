@@ -95,6 +95,28 @@ public class Driver {
 				javaxt.io.File[] frIndianicPics = folderSubDir.getFiles(fArray, true);
 				
 				
+				if (frIndianicPics == null){
+					
+					System.out.println("engIndianicPics array is null for sku: " + SKU);
+					
+				}
+				
+				if (frIndianicPics.length == 0){
+					
+					System.out.println("fr indianic pic array is empty for sku: "+ SKU);
+					System.out.println("french Carpet could not be located on Indianic, continuing to next carpet");
+					continue;
+					
+				}
+				
+				if(!VerifierTool.checkSameParent(frIndianicPics)){
+					
+					System.out.println("French files found do not share same parent");
+					throw new IOException();
+					
+				}	
+				
+				
 				Directory frSubDir = new Directory(VerifierTool.getSameParent(frIndianicPics));
 				
 				CarpetMover.moveAndOverwrite(aCarpetBatch, engSubDir, "En");
